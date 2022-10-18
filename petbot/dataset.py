@@ -8,7 +8,7 @@ def transform_ner_data(path: str | Path) -> None:
 
 
 def transform_intent_data(path: str | Path) -> None:
-    pass
+    return
 
 
 def load_ner_data(path: str | Path) -> ColumnCorpus:
