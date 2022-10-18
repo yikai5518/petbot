@@ -7,6 +7,7 @@ authors = ["Yikai Fan <yikaifan@umich.edu>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 flair = "^0.11.3"
+pandas = "^1.5.0"
 
 [tool.poetry.dev-dependencies]
 

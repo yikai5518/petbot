@@ -8,9 +8,9 @@ from flair.trainers import ModelTrainer
 class IntentClassifier():
     def __init__(
         self,
-        corpus: ClassificationCorpus,
-        label_dict: Dictionary,
-        model: str = "bert-base-uncased",
+        corpus : ClassificationCorpus,
+        label_dict : Dictionary,
+        model : str = "bert-base-uncased",
     ) -> None:
         embeddings = TransformerDocumentEmbeddings(
             model=model,
@@ -27,11 +27,11 @@ class IntentClassifier():
         
     def train(
         self,
-        save_path: str,
-        learning_rate: float = 5.0e-5,
-        mini_batch_size: int = 4,
-        max_epochs: int = 10,
-        checkpoint: bool = False,
+        save_path : str,
+        learning_rate : float = 5.0e-5,
+        mini_batch_size : int = 4,
+        max_epochs : int = 10,
+        checkpoint : bool = False,
     ) -> dict:
         results = self.trainer.train(
             save_path,
@@ -45,21 +45,21 @@ class IntentClassifier():
     
     def predict(
         self,
-        sentence: Sentence,
+        sentence : Sentence,
     ):
         self.classifier.predict(sentence)
         return sentence.labels
     
     def load(
         self,
-        save_path: str,
+        save_path : str,
     ):
         self.classifier = TextClassifier.load(save_path)
         
     def resume(
         self,
-        save_path: str,
-        max_epochs: int,
+        save_path : str,
+        max_epochs : int,
     ):
         self.load(save_path + '/checkpoint.pt')
         self.trainer.resume(

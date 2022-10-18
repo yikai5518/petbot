@@ -7,12 +7,12 @@ from flair.trainers import ModelTrainer
 class NERTagger():
     def __init__(
         self,
-        corpus: ColumnCorpus,
-        label_dict: Dictionary,
-        model: str = "bert-base-uncased",
-        layers: str = "-1",
-        subtoken_pooling: str = "first",
-        tagger_hidden_size: int = 256,
+        corpus : ColumnCorpus,
+        label_dict : Dictionary,
+        model : str = "bert-base-uncased",
+        layers : str = "-1",
+        subtoken_pooling : str = "first",
+        tagger_hidden_size : int = 256,
     ) -> None:
         embeddings = TransformerWordEmbeddings(
             model=model,
@@ -36,11 +36,11 @@ class NERTagger():
     
     def train(
         self,
-        save_path: str,
-        learning_rate=5.0e-6,
-        mini_batch_size=4,
-        mini_batch_chunk_size=None,
-        checkpoint=False,
+        save_path : str,
+        learning_rate : float = 5.0e-6,
+        mini_batch_size : int = 4,
+        mini_batch_chunk_size : int | None = None,
+        checkpoint : bool = False,
     ) -> dict:
         results = self.trainer.fine_tune(
             base_path=save_path,
@@ -54,7 +54,7 @@ class NERTagger():
         
     def predict(
         self,
-        sentence: Sentence,
+        sentence : Sentence,
     ):
         self.tagger.predict(sentence)
         
@@ -62,8 +62,8 @@ class NERTagger():
     
     def resume(
         self,
-        save_path: str,
-        max_epochs: int,
+        save_path : str,
+        max_epochs : int,
     ):
         self.load(save_path + '/checkpoint.pt')
         self.trainer.resume(

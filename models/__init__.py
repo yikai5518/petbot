@@ -1,2 +1,2 @@
-from ner_trainer import NERTagger
+from ner import NERTagger
 from intent import IntentClassifier
