@@ -1,8 +1,10 @@
+from typing import List
 from flair.models import TextClassifier
 from flair.datasets import ClassificationCorpus
 from flair.data import Dictionary, Sentence
 from flair.embeddings import TransformerDocumentEmbeddings
 from flair.trainers import ModelTrainer
+from flair.tokenization import SegtokSentenceSplitter
 
 
 class IntentClassifier:
@@ -45,9 +47,13 @@ class IntentClassifier:
 
         return results
 
-    def predict(self, sentence: Sentence) -> str | None:
-        self.classifier.predict(sentence)
-        return sentence.labels
+    def predict(self, text: str) -> List[Sentence]:
+        splitter = SegtokSentenceSplitter()
+        sentences = splitter.split(text)
+        
+        self.classifier.predict(sentences)
+        
+        return sentences
 
     def load(self, save_path: str) -> None:
         self.classifier = TextClassifier.load(save_path)

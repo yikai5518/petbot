@@ -1,8 +1,10 @@
+from typing import List
 from flair.datasets import ColumnCorpus
 from flair.embeddings import TransformerWordEmbeddings
 from flair.models import SequenceTagger
 from flair.data import Dictionary, Sentence
 from flair.trainers import ModelTrainer
+from flair.tokenization import SegtokSentenceSplitter
 
 
 class NERTagger:
@@ -55,10 +57,13 @@ class NERTagger:
 
         return results
 
-    def predict(self, sentence: Sentence) -> str:
-        self.tagger.predict(sentence)
+    def predict(self, text: str) -> List[Sentence]:
+        splitter = SegtokSentenceSplitter()
+        sentences = splitter.split(text)
+        
+        self.tagger.predict(sentences)
 
-        return sentence.to_tagged_string()
+        return sentences
 
     def load(self, save_path: str) -> None:
         self.tagger = SequenceTagger.load(save_path)
