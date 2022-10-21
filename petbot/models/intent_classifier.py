@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 from flair.models import TextClassifier
 from flair.datasets import ClassificationCorpus
@@ -10,7 +11,6 @@ from flair.tokenization import SegtokSentenceSplitter
 class IntentClassifier:
     def __init__(
         self,
-        corpus: ClassificationCorpus,
         label_dict: Dictionary,
         model: str = "bert-base-uncased",
     ) -> None:
@@ -24,11 +24,17 @@ class IntentClassifier:
             label_dictionary=label_dict,
             label_type="intent",
         )
-
-        self.trainer = ModelTrainer(self.classifier, corpus)
-
+    
+    @classmethod
+    def init_from_load(cls, path : str | Path):
+        obj = cls.__new__(cls)
+        obj.classifier = TextClassifier.load(path)
+        
+        return obj
+    
     def train(
         self,
+        corpus: ClassificationCorpus,
         save_path: str,
         learning_rate: float = 5.0e-5,
         mini_batch_size: int = 4,
@@ -36,7 +42,9 @@ class IntentClassifier:
         checkpoint: bool = False,
         **kwargs
     ) -> dict:
-        results = self.trainer.train(
+        trainer = ModelTrainer(self.classifier, corpus)
+        
+        results = trainer.train(
             save_path,
             learning_rate=learning_rate,
             mini_batch_size=mini_batch_size,
@@ -54,9 +62,6 @@ class IntentClassifier:
         self.classifier.predict(sentences)
         
         return sentences
-
-    def load(self, save_path: str) -> None:
-        self.classifier = TextClassifier.load(save_path)
 
     def resume(self, save_path: str, max_epochs: int) -> None:
         self.load(save_path + "/checkpoint.pt")

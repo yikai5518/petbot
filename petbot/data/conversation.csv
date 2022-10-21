@@ -1,2 +1,2 @@
-text," intent"," annotation"
-I want a black cat.,search,"[(black, COLOR), (cat, ANIMAL)]"
+text,"intent","annotation"
+I want a black cat.,"search","[(black, COLOR), (cat, ANIMAL)]"

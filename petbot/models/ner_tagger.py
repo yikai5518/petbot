@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 from flair.datasets import ColumnCorpus
 from flair.embeddings import TransformerWordEmbeddings
@@ -10,7 +11,6 @@ from flair.tokenization import SegtokSentenceSplitter
 class NERTagger:
     def __init__(
         self,
-        corpus: ColumnCorpus,
         label_dict: Dictionary,
         model: str = "bert-base-uncased",
         layers: str = "-1",
@@ -35,10 +35,16 @@ class NERTagger:
             reproject_embeddings=False,
         )
 
-        self.trainer = ModelTrainer(self.tagger, corpus)
-
+    @classmethod
+    def init_from_load(cls, path : str | Path):
+        obj = cls.__new__(cls)
+        obj.tagger = SequenceTagger.load(path)
+        
+        return obj
+    
     def train(
         self,
+        corpus: ColumnCorpus,
         save_path: str,
         learning_rate: float = 5.0e-6,
         mini_batch_size: int = 4,
@@ -46,7 +52,9 @@ class NERTagger:
         checkpoint: bool = False,
         **kwargs
     ) -> dict:
-        results = self.trainer.fine_tune(
+        trainer = ModelTrainer(self.tagger, corpus)
+        
+        results = trainer.fine_tune(
             base_path=save_path,
             learning_rate=learning_rate,
             mini_batch_size=mini_batch_size,

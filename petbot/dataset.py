@@ -43,7 +43,11 @@ def load_intent_data(path: str | Path) -> ClassificationCorpus:
 
 
 def load_data(path: str | Path) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    pass
+    data = pd.read_csv(path)
+    
+    # Split into train, test, and dev
+    
+    return data, pd.DataFrame(), pd.DataFrame()
 
 
 if __name__ == "__main__":
